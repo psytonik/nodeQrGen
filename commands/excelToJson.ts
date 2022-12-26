@@ -2,9 +2,9 @@ import Excel from 'xlsx';
 import fs from "fs";
 
 export interface ExcelData {
-	URL: string;
-	NAME: string;
-	ID: string;
+	qr_code: string;
+	retailer_name: string;
+	retailer_code: string;
 }
 const createJson = async () => {
 	let JSON_DATA = []
@@ -16,9 +16,9 @@ const createJson = async () => {
 		const data: ExcelData[] = Excel.utils.sheet_to_json(ws);
 		for(let d of data){
 			JSON_DATA.push({
-				link: d.URL,
-				name: d.NAME,
-				id: d.ID
+				link: d.qr_code,
+				name: d.retailer_name,
+				id: d.retailer_code
 			})
 		}
 		await fs.writeFileSync('data.json',JSON.stringify([...JSON_DATA]),{ "encoding": 'utf-8'});

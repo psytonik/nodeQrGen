@@ -1,22 +1,23 @@
 import {createCanvas,loadImage,registerFont, Image} from "canvas";
 import fs from "fs";
 
-const qrToCanvas = async (incomingText: string, id: number) => {
-	const width = 600;
-	const height = 600;
+const qrToCanvas = async (data:any) => {
+	const width = 1200;
+	const height = 1200;
 	try {
+		const {id, name} = await data;
 		let dir = "./images";
 		if (!fs.existsSync(dir)) {
-			await fs.mkdirSync(dir);
+			fs.mkdirSync(dir);
 		}
 		let publicDir = "./public";
 		if (!fs.existsSync(publicDir)) {
-			await fs.mkdirSync(publicDir);
+			fs.mkdirSync(publicDir);
 		}
 		let img = await loadImage(`images/${id}.svg`);
-		const canvas = await createCanvas(width, height,"svg");
+		const canvas = createCanvas(width, height, "svg");
 		const ctx = canvas.getContext('2d');
-		registerFont('./iqos.ttf', { family: 'Open Sans sans-serif', weight:'bold' })
+		registerFont('./iqos.ttf', { weight:'bold', family: 'Open Sans' })
 
 		const hRatio =  canvas.width / img.width;
 		const vRatio = canvas.height / img.height;
@@ -34,7 +35,7 @@ const qrToCanvas = async (incomingText: string, id: number) => {
 		ctx.direction = "rtl";
 		ctx.textAlign = "center";
 		ctx.fillStyle = "#000000";
-		ctx.fillText(incomingText, canvas.width / 2, height - 15);
+		ctx.fillText(name, canvas.width / 2, height - 15);
 
 		ctx.drawImage(
 				img,
